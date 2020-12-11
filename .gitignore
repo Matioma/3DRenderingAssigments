@@ -30,3 +30,6 @@
 *.exe
 *.out
 *.app
+
+**/debug_static_build
+**/debug_static_exe
