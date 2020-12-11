@@ -31,7 +31,8 @@
 *.out
 *.app
 
-Assigment/_visual_studio/debug_dynamic_build
-Assigment/_visual_studio/debug_dynamic_exe
-Assigment/_visual_studio/debug_static_build
-Assigment/_visual_studio/debug_static_exe
+**/Assigment/_visual_studio/debug_dynamic_build/
+**/Assigment/_visual_studio/debug_dynamic_exe/
+**/Assigment/_visual_studio/debug_static_build/
+**/Assigment/_visual_studio/debug_static_exe/
+
