@@ -3,6 +3,8 @@
 #include <iostream>
 #include "ShaderUtil.h"
 
+
+
 /**
  * Basic demo of rendering a triangle in OpenGL through the new programmable pipeline.
  * In a real life example, this code should include error checking and refactor into classes/functions.
@@ -108,8 +110,59 @@ int main () {
 
 	sf::Clock clock;
 
+
+	float rotation = 0;
+	float scale = 1;
+
+	float rotationSpeed = 0.1;
+	float rotationAcceleration = 1;
+
+	float scaleFactor = 1;
+
+	int patternCols = 10;
+	int patternRows = 10;
+
+
+	float LastTime = clock.getElapsedTime().asSeconds();
+	float deltaTime = 0;
+
+
     glClearColor(0, 0, 0, 1);
     while (window.isOpen()) {
+		float currentTime = clock.getElapsedTime().asSeconds();
+		deltaTime = currentTime - LastTime;
+
+
+
+		float elapsedTime = clock.getElapsedTime().asSeconds();
+
+		//std::cout << deltaTime << std::endl;
+
+
+		//empty the event queue
+		sf::Event event;
+		while (window.pollEvent(event)) {
+			if (event.type == sf::Event::Closed) window.close();
+			if (event.type == sf::Event::Resized) glViewport(0, 0, event.size.width, event.size.height);
+			if (event.type == sf::Event::KeyPressed) {
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+					rotationSpeed += rotationAcceleration * deltaTime;
+				}
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+
+					rotationSpeed -= rotationAcceleration * deltaTime;
+				}
+
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+					
+					scale += scaleFactor * deltaTime;
+				}
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+
+					scale -= scaleFactor * deltaTime;
+				}
+			}
+		}
 
 		glClear( GL_COLOR_BUFFER_BIT );
 
@@ -117,18 +170,27 @@ int main () {
         glUseProgram (programID);
 
 		//offset
-		float elapsedTime = clock.getElapsedTime().asSeconds();
+		
+		sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
+		sf::Vector2i invertedMousePosition;
+		invertedMousePosition.x = mousePosition.x;
+		invertedMousePosition.y = window.getSize().y - mousePosition.y;
+
+		std::cout << (float)invertedMousePosition.x << "; " << (float)invertedMousePosition.y << std::endl;
+
+
 		glUniform2f(glGetUniformLocation(programID, "offset"), 0.5f*cos(elapsedTime), 0.5f*sin(elapsedTime));
-		glUniform2f(glGetUniformLocation(programID, "UvRotationOffset"), 0.5f * cos(elapsedTime), 0.5f * sin(elapsedTime));
+		rotation += rotationSpeed * deltaTime;
+		glUniform1f(glGetUniformLocation(programID, "rotation"), rotation);
+		glUniform1f(glGetUniformLocation(programID, "scale"), scale);
 
 
 
+		
+		glUniform2f(glGetUniformLocation(programID, "mousePos"), invertedMousePosition.x, invertedMousePosition.y);
 
-
-
-		int cols =5;
-		int rows = 5;
-		glUniform2i(glGetUniformLocation(programID, "colsRows"), cols, rows);
+		
+		glUniform2i(glGetUniformLocation(programID, "colsRows"), patternCols, patternRows);
 
 
 
@@ -169,13 +231,8 @@ int main () {
         //display it
         window.display();
 
-		//empty the event queue
-        sf::Event event;
-        while (window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed) window.close();
-            if (event.type == sf::Event::Resized) glViewport(0, 0, event.size.width, event.size.height);
-        }
-
+		
+		LastTime = currentTime;
     }
 
     return 0;
