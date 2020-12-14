@@ -1,0 +1,1 @@
+void DrawQuad(const GLuint& programID, sf::Window& window, float elapsedTime, float& rotation, float rotationSpeed, float deltaTime, float scale, int patternCols, int patternRows, const GLuint& vertexBufferId, const GLuint& colorBufferId, const GLuint& uvBufferId, int offset);

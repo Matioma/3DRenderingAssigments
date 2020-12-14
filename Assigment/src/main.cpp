@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include "ShaderUtil.h"
+#include "main.h"
 
 
 
@@ -37,6 +38,7 @@ int main () {
 
 	//Create the shader program
 	GLuint programID = ShaderUtil::createProgram("vertexshader.vs", "fragmentshader.fs");
+	GLuint circleCheckersID = ShaderUtil::createProgram("vertexshaderCircle.vs", "fragmentshaderCircle.fs");
 
 	//declare the data to upload
 	const GLfloat vertices[] = {
@@ -46,7 +48,17 @@ int main () {
 		-0.5f,  0.5f, 0,
 		0.5f,  -0.5f, 0,
 		0.5f,   0.5f, 0,
-		-0.5f,  0.5f, 0
+		-0.5f,  0.5f, 0,
+
+		//Second Quad
+
+		-0.9f,0.9f,0,
+		-0.9f,0.0f,0,
+		0.0f,0.0f,0,
+
+		0.0f,0.0f,0,
+		0.0f,0.9f,0,
+		-0.9f,0.9f,0,
 	};
 
 	//create a handle to the buffer
@@ -88,9 +100,18 @@ int main () {
 
 
 	const GLfloat uvs[]{
+		//First Quad
 		0,0,
 		1,0,
 		0,1,
+		1,0,
+		1,1,
+		0,1,
+
+		//SecondQuad
+		0,1,
+		0,0,
+		1,0,
 		1,0,
 		1,1,
 		0,1
@@ -136,7 +157,6 @@ int main () {
 
 		float elapsedTime = clock.getElapsedTime().asSeconds();
 
-		//std::cout << deltaTime << std::endl;
 
 
 		//empty the event queue
@@ -167,66 +187,14 @@ int main () {
 		glClear( GL_COLOR_BUFFER_BIT );
 
         //tell the GPU to use this program
-        glUseProgram (programID);
-
-		//offset
-		
-		sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
-		sf::Vector2i invertedMousePosition;
-		invertedMousePosition.x = mousePosition.x;
-		invertedMousePosition.y = window.getSize().y - mousePosition.y;
-
-		std::cout << (float)invertedMousePosition.x << "; " << (float)invertedMousePosition.y << std::endl;
-
-
-		glUniform2f(glGetUniformLocation(programID, "offset"), 0.5f*cos(elapsedTime), 0.5f*sin(elapsedTime));
-		rotation += rotationSpeed * deltaTime;
-		glUniform1f(glGetUniformLocation(programID, "rotation"), rotation);
-		glUniform1f(glGetUniformLocation(programID, "scale"), scale);
-
 
 
 		
-		glUniform2f(glGetUniformLocation(programID, "mousePos"), invertedMousePosition.x, invertedMousePosition.y);
+		int offset = 6;
 
-		
-		glUniform2i(glGetUniformLocation(programID, "colsRows"), patternCols, patternRows);
+		DrawQuad(programID, window, elapsedTime, rotation, rotationSpeed, deltaTime, scale, patternCols, patternRows, vertexBufferId, colorBufferId, uvBufferId, 0);
 
-
-
-
-        //get index for the attributes in the shader
-        GLint vertexIndex = glGetAttribLocation(programID, "vertex");
-		GLint colorIndex = glGetAttribLocation(programID, "color");
-		GLint uvIndex = glGetAttribLocation(programID, "uv");
-
-		//tell OpenGL that the data for the vertexIndex/colorIndex is coming in from an array
-		glEnableVertexAttribArray(vertexIndex);
-		glEnableVertexAttribArray(colorIndex);
-		glEnableVertexAttribArray(uvIndex);
-
-		//bind the buffer with data.
-		//the moment this buffer is bound instead of 0, the last param of glVertexAttribPointer
-		//is interpreted as an offset and not a pointer
-		glBindBuffer(GL_ARRAY_BUFFER, vertexBufferId);
-		//send the data for this index to OpenGL, specifying it's format and structure
-		//vertexIndex // 3 bytes per element // floats // don't normalize // the data itself
-		glVertexAttribPointer(vertexIndex, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
-
-		//send the data for this index to OpenGL, specifying it's format and structure
-		//colorIndex // 3 bytes per element // floats // don't normalize // the data itself
-		glBindBuffer(GL_ARRAY_BUFFER, colorBufferId);
-		glVertexAttribPointer(colorIndex, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
-
-
-		glBindBuffer(GL_ARRAY_BUFFER, uvBufferId);
-		glVertexAttribPointer(uvIndex, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
-
-		//Draws elements from each enabled array using the specified mode (which is default for Unity etc as well)
-        glDrawArrays(GL_TRIANGLES, 0, 6);
-
-        glDisableVertexAttribArray (vertexIndex);
-        glDisableVertexAttribArray (colorIndex);
+		DrawQuad(circleCheckersID, window, elapsedTime, rotation, rotationSpeed, deltaTime, scale, patternCols, patternRows, vertexBufferId, colorBufferId, uvBufferId, 6);
 
         //display it
         window.display();
@@ -236,6 +204,65 @@ int main () {
     }
 
     return 0;
+}
+
+void DrawQuad(const GLuint& programID, sf::Window& window, float elapsedTime, float& rotation, float rotationSpeed, float deltaTime, float scale, int patternCols, int patternRows, const GLuint& vertexBufferId, const GLuint& colorBufferId, const GLuint& uvBufferId, int offset)
+{
+	glUseProgram(programID);
+
+	//offset
+
+	sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
+	sf::Vector2i invertedMousePosition;
+	invertedMousePosition.x = mousePosition.x;
+	invertedMousePosition.y = window.getSize().y - mousePosition.y;
+
+	//std::cout << (float)invertedMousePosition.x << "; " << (float)invertedMousePosition.y << std::endl;
+
+
+	glUniform2f(glGetUniformLocation(programID, "offset"), 0.5f * cos(elapsedTime), 0.5f * sin(elapsedTime));
+	rotation += rotationSpeed * deltaTime;
+	glUniform1f(glGetUniformLocation(programID, "rotation"), rotation);
+	glUniform1f(glGetUniformLocation(programID, "scale"), scale);
+
+	glUniform2f(glGetUniformLocation(programID, "mousePos"), invertedMousePosition.x, invertedMousePosition.y);
+	glUniform2i(glGetUniformLocation(programID, "colsRows"), patternCols, patternRows);
+
+
+
+
+	//get index for the attributes in the shader
+	GLint vertexIndex = glGetAttribLocation(programID, "vertex");
+	GLint colorIndex = glGetAttribLocation(programID, "color");
+	GLint uvIndex = glGetAttribLocation(programID, "uv");
+
+	//tell OpenGL that the data for the vertexIndex/colorIndex is coming in from an array
+	glEnableVertexAttribArray(vertexIndex);
+	glEnableVertexAttribArray(colorIndex);
+	glEnableVertexAttribArray(uvIndex);
+
+	//bind the buffer with data.
+	//the moment this buffer is bound instead of 0, the last param of glVertexAttribPointer
+	//is interpreted as an offset and not a pointer
+	glBindBuffer(GL_ARRAY_BUFFER, vertexBufferId);
+	//send the data for this index to OpenGL, specifying it's format and structure
+	//vertexIndex // 3 bytes per element // floats // don't normalize // the data itself
+	glVertexAttribPointer(vertexIndex, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+
+	//send the data for this index to OpenGL, specifying it's format and structure
+	//colorIndex // 3 bytes per element // floats // don't normalize // the data itself
+	glBindBuffer(GL_ARRAY_BUFFER, colorBufferId);
+	glVertexAttribPointer(colorIndex, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+
+
+	glBindBuffer(GL_ARRAY_BUFFER, uvBufferId);
+	glVertexAttribPointer(uvIndex, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
+
+	//Draws elements from each enabled array using the specified mode (which is default for Unity etc as well)
+	glDrawArrays(GL_TRIANGLES, offset, 6);
+
+	glDisableVertexAttribArray(vertexIndex);
+	glDisableVertexAttribArray(colorIndex);
 }
 
 
