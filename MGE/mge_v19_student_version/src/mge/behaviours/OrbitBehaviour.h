@@ -31,7 +31,10 @@ private:
 
 	void RotateAround(glm::vec3 position, float dx, float dy, float dz);
 	
+	float sensitivityX = 0.01;
+	float sensitivityY = 0.01;
 
+	float sensitivityStep = 0.001;
 };
 
 #endif // ORBITBEHAVIOUR_HPP
