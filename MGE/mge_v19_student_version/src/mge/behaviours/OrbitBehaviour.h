@@ -22,7 +22,6 @@ private:
 
 
 
-
 	float rotationSpeed = 0.01;
 	sf::Vector2i lastMousePos;
 
@@ -30,11 +29,15 @@ private:
 
 
 	void RotateAround(glm::vec3 position, float dx, float dy, float dz);
+
+	void Scale(float amount);
 	
 	float sensitivityX = 0.01;
 	float sensitivityY = 0.01;
 
 	float sensitivityStep = 0.001;
+
+	float zoomStep = 0.001;
 };
 
 #endif // ORBITBEHAVIOUR_HPP

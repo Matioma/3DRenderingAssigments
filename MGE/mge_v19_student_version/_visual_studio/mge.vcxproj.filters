@@ -20,6 +20,9 @@
     <Filter Include="MGE Source files\mge\util">
       <UniqueIdentifier>{7d824c34-4bb6-43a4-a48a-0d68b7aad6e5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MGE Source files\MyClasses">
+      <UniqueIdentifier>{768b1818-a543-4fd9-8427-5178d815c87f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\glm.hpp">
@@ -85,6 +88,9 @@
     <ClInclude Include="..\src\mge\behaviours\OrbitBehaviour.h">
       <Filter>MGE Source files\mge\behaviours</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\mge\EventHandler.h">
+      <Filter>MGE Source files\mge</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\main.cpp">
@@ -146,6 +152,9 @@
     </ClCompile>
     <ClCompile Include="..\src\mge\behaviours\OrbitBehaviour.cpp">
       <Filter>MGE Source files\mge\behaviours</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\mge\EventHandler.cpp">
+      <Filter>MGE Source files\mge</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

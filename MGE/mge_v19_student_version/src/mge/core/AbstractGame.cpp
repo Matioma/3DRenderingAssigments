@@ -3,10 +3,12 @@
 #include "AbstractGame.hpp"
 #include "mge/core/Renderer.hpp"
 #include "mge/core/World.hpp"
+#include "mge/EventHandler.h"
 
 AbstractGame::AbstractGame():_window(NULL),_renderer(NULL),_world(NULL), _fps(0)
 {
     //ctor
+
 }
 
 AbstractGame::~AbstractGame()
@@ -33,6 +35,7 @@ void AbstractGame::initialize() {
 void AbstractGame::_initializeWindow() {
 	std::cout << "Initializing window..." << std::endl;
 	_window = new sf::RenderWindow( sf::VideoMode(800,600), "My Game!", sf::Style::Default, sf::ContextSettings(24,8,0,3,3));
+
 	//_window->setVerticalSyncEnabled(true);
     std::cout << "Window initialized." << std::endl << std::endl;
 }
@@ -136,40 +139,49 @@ void AbstractGame::_render () {
 
 void AbstractGame::_processEvents()
 {
-	sf::Event event;
-	bool exit = false;
+    EventHandler::GetInstance()->ProcessEvents(*_window);
+ 
+	//sf::Event event;
 
-	//we must empty the event queue
-	while( _window->pollEvent( event ) ) {
-        //give all system event listeners a chance to handle events
-        //optionally to be implemented by you for example you could implement a
-        //SystemEventDispatcher / SystemEventListener pair which allows Listeners to
-        //register with the dispatcher and then do something like:
-        //SystemEventDispatcher::dispatchEvent(event);
+	//bool exit = false;
 
-        switch (event.type) {
-            case sf::Event::Closed:
-                exit = true;
-                break;
-            case sf::Event::KeyPressed:
-                if (event.key.code == sf::Keyboard::Escape) {
-                    exit = true;
-                }
-                break;
-            case sf::Event::Resized:
-                //would be better to move this to the renderer
-                //this version implements nonconstrained match viewport scaling
-                glViewport(0, 0, event.size.width, event.size.height);
-                break;
+	////we must empty the event queue
+	//while( _window->pollEvent( event ) ) {
+ //       //give all system event listeners a chance to handle events
+ //       //optionally to be implemented by you for example you could implement a
+ //       //SystemEventDispatcher / SystemEventListener pair which allows Listeners to
+ //       //register with the dispatcher and then do something like:
+ //       //SystemEventDispatcher::dispatchEvent(event);
+ //       //EventHandler::GetInstance()->setEvent(event);
+ //       switch (event.type) {
+ //           case sf::Event::Closed:
+ //               exit = true;
+ //               break;
+ //           case sf::Event::KeyPressed:
+ //               if (event.key.code == sf::Keyboard::Escape) {
+ //                   exit = true;
+ //               }
+ //               break;
+ //           case sf::Event::Resized:
+ //               glViewport(0, 0, event.size.width, event.size.height);
+ //               break;
+ //           case sf::Event::MouseWheelScrolled:
+ //               if (event.mouseWheelScroll.wheel == sf::Mouse::VerticalWheel)
+ //                   std::cout << "wheel type: vertical" << std::endl;
+ //               else if (event.mouseWheelScroll.wheel == sf::Mouse::HorizontalWheel)
+ //                   std::cout << "wheel type: horizontal" << std::endl;
+ //               else
+ //                   std::cout << "wheel type: unknown" << std::endl;
+ //               std::cout << "wheel movement: " << event.mouseWheelScroll.delta << std::endl;
+ //               break;
+ //           default:
+ //               break;
+ //       }
+	//}
 
-            default:
-                break;
-        }
-	}
-
-	if (exit) {
-        _window->close();
-	}
+	//if (exit) {
+ //       _window->close();
+	//}
 }
 
 

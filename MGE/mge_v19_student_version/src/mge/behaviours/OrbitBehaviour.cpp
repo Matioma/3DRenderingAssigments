@@ -3,10 +3,17 @@
 #include "glm.hpp"
 #include <SFML/Window/Mouse.hpp>
 #include <SFML/Window/Keyboard.hpp>
+#include <SFML/Window/Event.hpp>
+#include "./mge/EventHandler.h"
 
 OrbitBehaviour::OrbitBehaviour(GameObject& target, glm::vec3 pOffset) :target(target)
 {
 	this->offset = pOffset;
+
+	EventHandler::GetInstance()->Subscribe(sf::Event::MouseWheelScrolled, [this](sf::Event event) {
+		glm::vec4 newOffset = glm::scale(glm::vec3(1 - event.mouseWheelScroll.delta* 0.05)) * glm::vec4(this->offset, 1);
+		this->offset = glm::vec3(newOffset);
+	});
 	
 }
 
@@ -16,7 +23,7 @@ OrbitBehaviour::~OrbitBehaviour()
 
 void OrbitBehaviour::update(float pStep)
 {
-	std::cout << _owner->getTransform()[0] << " " << _owner->getTransform()[1] << _owner->getTransform()[2] << std::endl;
+	//std::cout << _owner->getTransform()[0] << " " << _owner->getTransform()[1] << _owner->getTransform()[2] << std::endl;
 
 
 
@@ -40,8 +47,19 @@ void OrbitBehaviour::update(float pStep)
 			sensitivityX = 0;
 		}
 	}
+	
+	
 
-
+	
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::X)) {
+		glm::vec4 newOffset = glm::scale(glm::vec3(1 - 0.05)) * glm::vec4(this->offset, 1);
+		this->offset = glm::vec3(newOffset);
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::C)) {
+		glm::vec4 newOffset = glm::scale(glm::vec3(1 + 0.05)) * glm::vec4(this->offset, 1);
+		this->offset = glm::vec3(newOffset);
+	}
+	
 
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
 		float dx = sf::Mouse::getPosition().x - this->lastMousePos.x;
@@ -83,4 +101,9 @@ void OrbitBehaviour::RotateAround(glm::vec3 position, float dx, float dy,float d
 	_owner->setTransform(glm::translate(position)*rotationMatrix *  glm::translate(-position) * _owner->getWorldTransform());
 	
 
+}
+
+
+void OrbitBehaviour::Scale(float amount) {
+	_owner->setTransform(glm::translate(_owner->getWorldPosition()) * glm::scale(glm::vec3(1 + amount)) * glm::translate(-_owner->getWorldPosition()) * _owner->getWorldTransform());
 }
