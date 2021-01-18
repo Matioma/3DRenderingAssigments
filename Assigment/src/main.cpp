@@ -184,16 +184,12 @@ int main () {
 			}
 		}
 
+
 		glClear( GL_COLOR_BUFFER_BIT );
 
-        //tell the GPU to use this program
-
-
-		
 		int offset = 6;
 
 		DrawQuad(programID, window, elapsedTime, rotation, rotationSpeed, deltaTime, scale, patternCols, patternRows, vertexBufferId, colorBufferId, uvBufferId, 0);
-
 		DrawQuad(circleCheckersID, window, elapsedTime, rotation, rotationSpeed, deltaTime, scale, patternCols, patternRows, vertexBufferId, colorBufferId, uvBufferId, 6);
 
         //display it
@@ -205,6 +201,10 @@ int main () {
 
     return 0;
 }
+
+
+
+
 
 void DrawQuad(const GLuint& programID, sf::Window& window, float elapsedTime, float& rotation, float rotationSpeed, float deltaTime, float scale, int patternCols, int patternRows, const GLuint& vertexBufferId, const GLuint& colorBufferId, const GLuint& uvBufferId, int offset)
 {
