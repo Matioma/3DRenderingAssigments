@@ -17,21 +17,8 @@ OrbitBehaviour::~OrbitBehaviour()
 void OrbitBehaviour::update(float pStep)
 {
 	std::cout << _owner->getTransform()[0] << " " << _owner->getTransform()[1] << _owner->getTransform()[2] << std::endl;
-	//this->_owner->setLocalPosition(glm::vec3(10,10,10));
-	//_owner->setLocalPosition(target.getWorldPosition() + this->offset);
 
-	//RotateAround(target.getWorldPosition(), glm::vec3(1, 0, 0), 1*0.01);
-	//RotateAround(target.getWorldPosition(), glm::vec3(0, 1, 0), 1 * 0.01);
 
-	//float dx = 10;
-	//float dy = 10;
-	//_owner->setLocalPosition(target.getWorldPosition() + this->offset);
-
-	
-
-	/*float rotationXSpeed = 0.01;
-	float rotationYSpeed = 0.01;
-	float rotationZSpeed = 0.00;*/
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
 		sensitivityY += sensitivityStep;
@@ -59,10 +46,6 @@ void OrbitBehaviour::update(float pStep)
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
 		float dx = sf::Mouse::getPosition().x - this->lastMousePos.x;
 		float dy = sf::Mouse::getPosition().y - this->lastMousePos.y;
-
-
-		/*RotateAround(target.getWorldPosition(), dy * rotationXSpeed, 0 * rotationYSpeed, rotationZSpeed);
-		RotateAround(target.getWorldPosition(), 0 * rotationXSpeed, dx * rotationYSpeed, rotationZSpeed);*/
 
 		RotateAround(target.getWorldPosition(), dy * sensitivityX, dx * sensitivityY, 0);
 	}
