@@ -16,6 +16,8 @@ public:
 	virtual ~OrbitBehaviour();
 	virtual void update(float pStep);
 
+	void ControllSensitivity();
+
 private:
 	GameObject& target;
 	glm::vec3 offset;
