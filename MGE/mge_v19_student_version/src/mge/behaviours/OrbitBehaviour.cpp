@@ -38,12 +38,8 @@ void OrbitBehaviour::update(float pStep)
 
 		RotateAround(target.getWorldPosition(), 0, dx * sensitivityY, 0);
 
-		glm::vec3 forward = _owner->getTransform()[3];
-		//std::cout <<glm::length(forward)<< std::endl;
 
-		//std::cout << abs(glm::normalizeDot(glm::vec3(0, 1, 0), forward)) << ";" << glm::cos(20 * glm::pi<float>() / 180) << std::endl;
-		
-
+		glm::vec3 forward = _owner->getTransform()[2];
 		float cosAngle =(glm::normalizeDot(glm::vec3(0, 1, 0), forward));
 		float degrees = 45;
 		float maxCos =cos(glm::radians(90 - degrees));

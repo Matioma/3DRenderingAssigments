@@ -187,8 +187,11 @@
     <ClInclude Include="..\src\mge\core\Texture.hpp" />
     <ClInclude Include="..\src\mge\core\World.hpp" />
     <ClInclude Include="..\src\mge\EventHandler.h" />
+    <ClInclude Include="..\src\mge\Lights\DirectionalLight.h" />
+    <ClInclude Include="..\src\mge\Lights\PointLight.h" />
     <ClInclude Include="..\src\mge\materials\AbstractMaterial.hpp" />
     <ClInclude Include="..\src\mge\materials\ColorMaterial.hpp" />
+    <ClInclude Include="..\src\mge\materials\LightMaterial.hpp" />
     <ClInclude Include="..\src\mge\materials\TextureMaterial.hpp" />
     <ClInclude Include="..\src\mge\MGEDemo.hpp" />
     <ClInclude Include="..\src\mge\util\DebugHud.hpp" />
@@ -210,8 +213,11 @@
     <ClCompile Include="..\src\mge\core\Texture.cpp" />
     <ClCompile Include="..\src\mge\core\World.cpp" />
     <ClCompile Include="..\src\mge\EventHandler.cpp" />
+    <ClCompile Include="..\src\mge\Lights\DirectionalLight.cpp" />
+    <ClCompile Include="..\src\mge\Lights\PointLight.cpp" />
     <ClCompile Include="..\src\mge\materials\AbstractMaterial.cpp" />
     <ClCompile Include="..\src\mge\materials\ColorMaterial.cpp" />
+    <ClCompile Include="..\src\mge\materials\LightMaterial.cpp" />
     <ClCompile Include="..\src\mge\materials\TextureMaterial.cpp" />
     <ClCompile Include="..\src\mge\MGEDemo.cpp" />
     <ClCompile Include="..\src\mge\util\DebugHud.cpp" />

@@ -36,6 +36,9 @@ void ColorMaterial::setDiffuseColor(glm::vec3 pDiffuseColor) {
 void ColorMaterial::render(World* pWorld, Mesh* pMesh, const glm::mat4& pModelMatrix, const glm::mat4& pViewMatrix, const glm::mat4& pProjectionMatrix) {
     _shader->use();
 
+
+
+
     //set the material color
     glUniform3fv (_shader->getUniformLocation("diffuseColor"), 1, glm::value_ptr(_diffuseColor));
 

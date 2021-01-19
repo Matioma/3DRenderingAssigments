@@ -2,7 +2,9 @@
 #include "mge/core/World.hpp"
 
 Light::Light(const std::string& pName, const glm::vec3& pPosition):GameObject(pName, pPosition)
-{}
+{
+
+}
 
 Light::~Light() {
 }
@@ -21,5 +23,15 @@ void Light::_setWorldRecursively (World* pWorld) {
 	if (newWorld != nullptr) newWorld->registerLight(this);
 
 }
+glm::vec3 Light::getColor()
+{
+    return color;
+}
+void Light::setColor(glm::vec3 newColor)
+{
+    color = newColor;
+}
+
+
 
 
