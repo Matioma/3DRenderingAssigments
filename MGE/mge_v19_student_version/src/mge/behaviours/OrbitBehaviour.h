@@ -12,16 +12,18 @@ class OrbitBehaviour : public AbstractBehaviour
 {
 public:
 	//move speed is in units per second, turnspeed in degrees per second
-	OrbitBehaviour(GameObject& target, glm::vec3 pOffset);
+	OrbitBehaviour(GameObject& target, glm::vec3 pOffset, bool isRestricted=true);
 	virtual ~OrbitBehaviour();
 	virtual void update(float pStep);
 
 	void ControllSensitivity();
+	
+
 
 private:
 	GameObject& target;
 	glm::vec3 offset;
-
+	bool isRestricted = false;
 
 
 	float rotationSpeed = 0.01;

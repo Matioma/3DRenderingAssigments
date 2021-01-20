@@ -10,7 +10,7 @@
 #include <cmath>
 
 
-OrbitBehaviour::OrbitBehaviour(GameObject& target, glm::vec3 pOffset) :target(target)
+OrbitBehaviour::OrbitBehaviour(GameObject& target, glm::vec3 pOffset,bool isRestricted) :target(target), isRestricted(isRestricted)
 {
 	this->offset = pOffset;
 
@@ -45,77 +45,27 @@ void OrbitBehaviour::update(float pStep)
 		float maxCos =cos(glm::radians(90 - degrees));
 		
 
-		/// <summary>
+
 		/// Restric Rotation over X axis
-		/// </summary>
-		/// <param name="pStep"></param>
-		if (cosAngle<=maxCos && cosAngle >= -maxCos) {
-			RotateAround(target.getWorldPosition(), dy * sensitivityX, 0, 0);
-		}
-		else {
-			if (cosAngle > 0) {
-				float angleDiff = abs(acos(maxCos) - acos(cosAngle));
-				RotateAround(target.getWorldPosition(), angleDiff, 0, 0);
+		if (isRestricted) {
+			if (cosAngle <= maxCos && cosAngle >= -maxCos) {
+				RotateAround(target.getWorldPosition(), dy * sensitivityX, 0, 0);
 			}
 			else {
-				float angleDiff = glm::radians(180 - degrees) - acos(cosAngle);
-				RotateAround(target.getWorldPosition(), angleDiff, 0, 0);
+				if (cosAngle > 0) {
+					float angleDiff = abs(acos(maxCos) - acos(cosAngle));
+					RotateAround(target.getWorldPosition(), angleDiff, 0, 0);
+				}
+				else {
+					float angleDiff = glm::radians(180 - degrees) - acos(cosAngle);
+					RotateAround(target.getWorldPosition(), angleDiff, 0, 0);
+				}
 			}
 		}
-
-
-
-		
-
-
-		
-		
-		//std::cout << acceptableAngle - angle << std::endl;
-
-		//std::cout << angle << std::endl;
-		
-	/*	if (angle >= acceptableAngle && angle < glm::radians(180 - degrees)) {
-			RotateAround(target.getWorldPosition(), dy * sensitivityX, 0, 0);
-		}
-		else {*/
-			/*if (angle < glm::radians(90.0)) {
-				RotateAround(target.getWorldPosition(), acceptableAngle- angle, 0, 0);
-			}else{
-				RotateAround(target.getWorldPosition(), (glm::radians(-180.0)+ acceptableAngle)- angle, 0, 0);
-			}*/
-		/*	else {
-				RotateAround(target.getWorldPosition(),angle - 180 - degrees, 0, 0);
-			}*/
-		//}
-
-
-		/*if (angle < acceptableAngle) {
-			RotateAround(target.getWorldPosition(), dy * sensitivityX, 0, 0);
-		}*/
-
-
-		 
-		//std::cout << angle << " " << acceptableAngle <<  " " << range << std::endl;
-		//if (range < 0) {
-		//	//RotateAround(target.getWorldPosition(), range, 0, 0);
-		//}
-		//else {
-		//	RotateAround(target.getWorldPosition(), dy * sensitivityX, 0, 0);
-		//}
-
-
-
-		
-		/*if () < glm::cos(20 * glm::pi<float>() / 180)) {
-			
-		}
 		else {
-			
-
-		}*/
-		/*if (glm::dot(glm::vec3(0, 1, 0), forward) <= 10) {
-		}*/
-	
+			RotateAround(target.getWorldPosition(), dy * sensitivityX, 0, 0);
+		}
+		
 	}
 
 	_owner->setLocalPosition(target.getWorldPosition() + this->offset);

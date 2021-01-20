@@ -51,8 +51,15 @@ void LightMaterial::render(World* pWorld, Mesh* pMesh, const glm::mat4& pModelMa
     if (dirLight) {
         glm::vec3 direction =glm::normalize(dirLight->getTransform()[2]);
         glUniform3fv(_shader->getUniformLocation("lightDirection"), 1,glm::value_ptr(direction));
-        std::cout << direction << std::endl;
+        
     }
+
+    PointLight* pointLight = dynamic_cast<PointLight*>(light);
+    if (pointLight) {
+        glm::vec3 lightPosition = pointLight->getWorldTransform()[3];
+        glUniform3fv(_shader->getUniformLocation("pointLightPos"), 1, glm::value_ptr(lightPosition));
+    }
+
 
     glUniform3fv(_shader->getUniformLocation("ambientColor"), 1, glm::value_ptr(light->getColor()));
     //set the material color

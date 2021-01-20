@@ -12,8 +12,19 @@ uniform	mat4 	modelMatrix;
 
 out vec3 fNormal;
 
+out vec3 fPosition;
+
+
+
+
+
 void main( void ){
     	gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(vertex, 1.f);
 
-		fNormal = normal;
+		//vec4 transformedNormal = * vec4(normal, 1.0f); 
+		fNormal =  mat3(modelMatrix)* normal;
+
+
+
+		fPosition =mat3(modelMatrix)*vertex;
 }

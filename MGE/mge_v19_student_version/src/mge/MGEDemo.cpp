@@ -21,6 +21,7 @@
 #include "mge/behaviours/KeysBehaviour.hpp"
 #include "mge/behaviours/FollowBehaviour.h"
 #include "mge/behaviours/OrbitBehaviour.h"
+#include "mge/behaviours/SinMovementBehaviour.h"
 
 
 #include "mge/Lights/PointLight.h"
@@ -50,7 +51,7 @@ void MGEDemo::initialize() {
 void MGEDemo::_initializeScene()
 {
     Assigment3();
-   // Assigment2();
+    //Assigment2();
 
 }
 
@@ -99,28 +100,39 @@ void MGEDemo::Assigment3()
     _world->setMainCamera(camera);
 
 
-
-
     //add the floor
     GameObject* plane = new GameObject("plane", glm::vec3(0, 0, 0));
     plane->scale(glm::vec3(5, 5, 5));
     plane->setMesh(planeMeshDefault);
     plane->setMaterial(whiteMaterial);
     _world->add(plane);
- 
 
+
+
+    GameObject* cube = new GameObject("cube", glm::vec3(0, 1, 0));
+    cube->scale(glm::vec3(5, 5, 5));
+    cube->setMesh(teaPotMesh);
+    cube->setMaterial(whiteMaterial);
+    cube->setBehaviour(new RotatingBehaviour(glm::vec3(1,0,1)));
+    //_world->add(cube);
+
+
+    //camera->setBehaviour(new OrbitBehaviour(*cube,glm::vec3(0,25,25)));
     //add a light. Note that the light does ABSOLUTELY ZIP! NADA ! NOTHING !
     //It's here as a place holder to get you started.
     //Note how the texture material is able to detect the number of lights in the scene
     //even though it doesn't implement any lighting yet!
 
-    Light* light = new DirectionalLight("light", glm::vec3(0,4,0));
-    light->rotate(0.1, glm::vec3(10, 0, 10));
-    light->setColor(glm::vec4(1, 0.5f, 0.1f,1.0f));
+    Light* light = new PointLight("light", glm::vec3(0,0,0));
+    light->rotate(90, glm::vec3(1, 0, 0));
+    light->setColor(glm::vec4(1, 0.0f, 0.0f,1.0f));
     light->scale(glm::vec3(0.1f, 0.1f, 0.1f));
     light->setMesh(cubeMeshF);
     light->setMaterial(lightMaterial);
-    light->setBehaviour(new KeysBehaviour(25));
+    //light->setBehaviour(new OrbitBehaviour(*cube, glm::vec3(0,0,10), false));
+    light->setBehaviour(new SinMovementBehaviour(1, glm::vec3(0,-1,0)));
+
+    //light->setBehaviour(new RotatingBehaviour(glm::vec3(1,0,0)));
     _world->add(light);
 }
 

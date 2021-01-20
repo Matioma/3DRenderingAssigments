@@ -7,15 +7,4 @@ PointLight::PointLight(const std::string& pName, const glm::vec3& pPosition) :Li
 PointLight::~PointLight() {
 }
 
-glm::vec4 PointLight::getColor()
-{
-	return color;
-}
-
-void PointLight::setColor(glm::vec4 newColor)
-{
-	color = newColor;
-}
-
-
 
