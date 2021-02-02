@@ -26,6 +26,7 @@
 
 #include "mge/Lights/PointLight.h"
 #include "mge/Lights/DirectionalLight.h"
+#include "mge/Lights/SpotLight.h"
 
 #include "mge/util/DebugHud.hpp"
 
@@ -92,7 +93,7 @@ void MGEDemo::Assigment3()
 
     //LightMaterial* lightMaterial = ;ec
 
-    AbstractMaterial* materialRedish = new LightMaterial(glm::vec3(1, 1.0, 1),glm::vec3(1,0,0),50);
+    AbstractMaterial* materialRedish = new LightMaterial(glm::vec3(0, 0, 1),glm::vec3(1,0,0),50);
 
 
     //SCENE SETUP
@@ -100,7 +101,7 @@ void MGEDemo::Assigment3()
     //add camera first (it will be updated last)
     Camera* camera = new Camera("camera", glm::vec3(0, 15, 15));
     camera->rotate(glm::radians(-40.0f), glm::vec3(1, 0, 0));
-    //camera->setBehaviour(new FollowBehavior(*camera));
+   
 
 
     _world->add(camera);
@@ -108,11 +109,29 @@ void MGEDemo::Assigment3()
 
 
     //add the floor
-    GameObject* plane = new GameObject("plane", glm::vec3(0, 0, 0));
-    plane->scale(glm::vec3(5, 5, 5));
-    plane->setMesh(planeMeshDefault);
-    plane->setMaterial(materialRedish);
-    _world->add(plane);
+    GameObject* groundPlane = new GameObject("plane", glm::vec3(0, 0, 0));
+    groundPlane->scale(glm::vec3(5, 5, 5));
+    groundPlane->setMesh(planeMeshDefault);
+    groundPlane->setMaterial(materialRedish);
+    _world->add(groundPlane);
+
+
+   /* groundPlane = new GameObject("plane", glm::vec3(0, 3, 0));
+    groundPlane->scale(glm::vec3(5, 5, 5));
+    groundPlane->setMesh(planeMeshDefault);
+    groundPlane->setMaterial(materialRedish);
+    _world->add(groundPlane);*/
+
+    //camera->setBehaviour(new FollowBehaviour(*groundPlane));
+
+    ////add the floor
+    GameObject* backplane = new GameObject("plane", glm::vec3(0, 1, -1));
+    backplane->rotate(-90, glm::vec3(1, 0, 0));
+    backplane->scale(glm::vec3(5, 5, 5));
+    backplane->setMesh(planeMeshDefault);
+    backplane->setMaterial(materialRedish);
+    //backplane->setBehaviour(new RotatingBehaviour(glm::vec3(1,0,0)));
+    _world->add(backplane);
 
 
 
@@ -121,26 +140,41 @@ void MGEDemo::Assigment3()
     cube->setMesh(teaPotMesh);
     cube->setMaterial(materialRedish);
     cube->setBehaviour(new RotatingBehaviour(glm::vec3(1,0,1)));
+    
     //_world->add(cube);
 
-
+    
     //camera->setBehaviour(new OrbitBehaviour(*cube,glm::vec3(0,25,25)));
     //add a light. Note that the light does ABSOLUTELY ZIP! NADA ! NOTHING !
     //It's here as a place holder to get you started.
     //Note how the texture material is able to detect the number of lights in the scene
     //even though it doesn't implement any lighting yet!
+    
+    
 
-    Light* light = new PointLight("light", glm::vec3(0,5,0));
-    light->rotate(90, glm::vec3(1, 0, 0));
-    light->setColor(glm::vec4(1, 1.0f, 1.0f,1.0f));
-    light->scale(glm::vec3(0.1f, 0.1f, 0.1f));
-    light->setMesh(cubeMeshF);
-    light->setMaterial(lightMaterial);
+    Light* pointLight = new PointLight("light", glm::vec3(0,5,0));
+    pointLight->rotate(90, glm::vec3(1, 0, 0));
+    pointLight->setColor(glm::vec4(1.0, 0, 0.0f,1.0f));
+    pointLight->scale(glm::vec3(0.1f, 0.1f, 0.1f));
+    pointLight->setMesh(cubeMeshF);
+    pointLight->setMaterial(lightMaterial);
     //light->setBehaviour(new OrbitBehaviour(*cube, glm::vec3(0,0,10), false));
-    light->setBehaviour(new SinMovementBehaviour(5, glm::vec3(0,1,0)));
+    pointLight->setBehaviour(new SinMovementBehaviour(5, glm::vec3(0,1,0)));
+   // _world->add(pointLight);
 
-    //light->setBehaviour(new RotatingBehaviour(glm::vec3(1,0,0)));
-    _world->add(light);
+
+    Light* spotLight = new SpotLight("spotLight", glm::vec3(0, 3, 0));
+    spotLight->rotate(135, glm::vec3(0, 0, 1));
+    spotLight->rotate(135, glm::vec3(1, 0, 0));
+    spotLight->setColor(glm::vec4(1, 1.0f, 1.0f, 1.0f));
+    spotLight->scale(glm::vec3(0.1f, 0.1f, 0.1f));
+    spotLight->setMesh(cubeMeshF);
+    spotLight->setMaterial(lightMaterial);
+    //spotLight->setBehaviour(new OrbitBehaviour(*cube, glm::vec3(0,0,10), false));
+    //spotLight->setBehaviour(new SinMovementBehaviour(5, glm::vec3(0, 1, 0)));
+
+    spotLight->setBehaviour(new RotatingBehaviour(glm::vec3(1,0,0)));
+    _world->add(spotLight);
 }
 
 void MGEDemo::Assigment2()

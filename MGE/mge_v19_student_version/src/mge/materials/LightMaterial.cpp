@@ -10,6 +10,7 @@
 
 #include <mge/Lights/PointLight.h>
 #include "mge/Lights/DirectionalLight.h"
+#include "mge/Lights/SpotLight.h"
 
 #include "mge/core/Camera.hpp"
 
@@ -58,25 +59,34 @@ void LightMaterial::render(World* pWorld, Mesh* pMesh, const glm::mat4& pModelMa
     int lightCount = pWorld->getLightCount();
     Light* light= pWorld->getLightAt(0);
    
-    /*DirectionalLight* dirLight = dynamic_cast<DirectionalLight*>(light);
+
+    DirectionalLight* dirLight = dynamic_cast<DirectionalLight*>(light);
     
     if (dirLight) {
+        glUniform1i(_shader->getUniformLocation("lightType"), 0);
         glm::vec3 direction =glm::normalize(dirLight->getTransform()[2]);
         glUniform3fv(_shader->getUniformLocation("lightDirection"), 1,glm::value_ptr(direction));
         
-    }*/
-
-
-
-
+    }
     PointLight* pointLight = dynamic_cast<PointLight*>(light);
     if (pointLight) {
-        glm::vec3 lightPosition = pointLight->getWorldTransform()[3];
-        glUniform3fv(_shader->getUniformLocation("pointLightPos"), 1, glm::value_ptr(lightPosition));
+        glUniform1i(_shader->getUniformLocation("lightType"), 1);
     }
 
+    SpotLight* spotLight = dynamic_cast<SpotLight*>(light);
+    if (spotLight) {
+        glUniform1i(_shader->getUniformLocation("lightType"), 2);
+        glm::vec3 down = -glm::normalize(spotLight->getWorldTransform()[1]);
+       // std::cout << down << std::endl;
+        glUniform3fv(_shader->getUniformLocation("lightDirection"), 1, glm::value_ptr(down));
 
+        glUniform1f(_shader->getUniformLocation("coneAngle"), 60);
+        glUniform1f(_shader->getUniformLocation("coneFallOffAngle"), 20);
+    }
 
+    
+    glm::vec3 lightPosition = light->getWorldTransform()[3];
+    glUniform3fv(_shader->getUniformLocation("pointLightPos"), 1, glm::value_ptr(lightPosition));
     //Specular data
     glm::vec3 worldCameraPosition = pWorld->getMainCamera()->getWorldPosition();
     glUniform3f(_shader->getUniformLocation("cameraPosition"), worldCameraPosition.x, worldCameraPosition.y, worldCameraPosition.z);
@@ -87,6 +97,10 @@ void LightMaterial::render(World* pWorld, Mesh* pMesh, const glm::mat4& pModelMa
     glUniform3fv(_shader->getUniformLocation("ambientColor"), 1, glm::value_ptr(light->getColor()));
     //set the material color
     glUniform3fv(_shader->getUniformLocation("diffuseColor"), 1, glm::value_ptr(_diffuseColor));
+
+
+
+
 
     //pass in all MVP matrices separately
     glUniformMatrix4fv(_shader->getUniformLocation("projectionMatrix"), 1, GL_FALSE, glm::value_ptr(pProjectionMatrix));
