@@ -12,6 +12,7 @@ class Light : public GameObject
 {
 	private:
 		glm::vec3 color;
+		float intensity;
 
 	public:
 		Light(const std::string& aName = nullptr, const glm::vec3& aPosition = glm::vec3( 2.0f, 10.0f, 5.0f ) );

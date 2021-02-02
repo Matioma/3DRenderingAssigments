@@ -11,10 +11,12 @@
 #include <mge/Lights/PointLight.h>
 #include "mge/Lights/DirectionalLight.h"
 
+#include "mge/core/Camera.hpp"
+
 
 ShaderProgram* LightMaterial::_shader = NULL;
 
-LightMaterial::LightMaterial(glm::vec3 pDiffuseColor) :_diffuseColor(pDiffuseColor)
+LightMaterial::LightMaterial(glm::vec3 pDiffuseColor, glm::vec3 pSpecularColor, float shininess) :_diffuseColor(pDiffuseColor),_specularColor(pSpecularColor), shininess(shininess)
 {
     //every time we create an instance of colormaterial we check if the corresponding shader has already been loaded
     _lazyInitializeShader();
@@ -39,6 +41,16 @@ void LightMaterial::setDiffuseColor(glm::vec3 pDiffuseColor) {
     _diffuseColor = pDiffuseColor;
 }
 
+void LightMaterial::setSpecularColor(glm::vec3 pSpecularColor)
+{
+    _specularColor = pSpecularColor;
+}
+
+void LightMaterial::setShininess(float pShininess)
+{
+    shininess = pShininess;
+}
+
 void LightMaterial::render(World* pWorld, Mesh* pMesh, const glm::mat4& pModelMatrix, const glm::mat4& pViewMatrix, const glm::mat4& pProjectionMatrix) {
     _shader->use();
 
@@ -46,13 +58,16 @@ void LightMaterial::render(World* pWorld, Mesh* pMesh, const glm::mat4& pModelMa
     int lightCount = pWorld->getLightCount();
     Light* light= pWorld->getLightAt(0);
    
-    DirectionalLight* dirLight = dynamic_cast<DirectionalLight*>(light);
+    /*DirectionalLight* dirLight = dynamic_cast<DirectionalLight*>(light);
     
     if (dirLight) {
         glm::vec3 direction =glm::normalize(dirLight->getTransform()[2]);
         glUniform3fv(_shader->getUniformLocation("lightDirection"), 1,glm::value_ptr(direction));
         
-    }
+    }*/
+
+
+
 
     PointLight* pointLight = dynamic_cast<PointLight*>(light);
     if (pointLight) {
@@ -61,6 +76,14 @@ void LightMaterial::render(World* pWorld, Mesh* pMesh, const glm::mat4& pModelMa
     }
 
 
+
+    //Specular data
+    glm::vec3 worldCameraPosition = pWorld->getMainCamera()->getWorldPosition();
+    glUniform3f(_shader->getUniformLocation("cameraPosition"), worldCameraPosition.x, worldCameraPosition.y, worldCameraPosition.z);
+    glUniform3f(_shader->getUniformLocation("specularColor"), _specularColor.x, _specularColor.y, _specularColor.z);
+    glUniform1f(_shader->getUniformLocation("shininess"), shininess);
+    
+    
     glUniform3fv(_shader->getUniformLocation("ambientColor"), 1, glm::value_ptr(light->getColor()));
     //set the material color
     glUniform3fv(_shader->getUniformLocation("diffuseColor"), 1, glm::value_ptr(_diffuseColor));

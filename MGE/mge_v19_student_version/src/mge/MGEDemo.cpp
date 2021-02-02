@@ -32,6 +32,8 @@
 #include "mge/config.hpp"
 #include "mge/MGEDemo.hpp"
 
+//class LightMaterial;
+
 //construct the game class into _window, _renderer and hud (other parts are initialized by build)
 MGEDemo::MGEDemo():AbstractGame (),_hud(0)
 {
@@ -86,7 +88,12 @@ void MGEDemo::Assigment3()
      AbstractMaterial* red = new ColorMaterial(glm::vec3(1, 0, 0));
     AbstractMaterial* blue = new ColorMaterial(glm::vec3(0, 0, 1));
 
-    AbstractMaterial* whiteMaterial = new LightMaterial(glm::vec3(0.5, 1.0, 0.7));
+
+
+    //LightMaterial* lightMaterial = ;ec
+
+    AbstractMaterial* materialRedish = new LightMaterial(glm::vec3(1, 1.0, 1),glm::vec3(1,0,0),50);
+
 
     //SCENE SETUP
 
@@ -104,7 +111,7 @@ void MGEDemo::Assigment3()
     GameObject* plane = new GameObject("plane", glm::vec3(0, 0, 0));
     plane->scale(glm::vec3(5, 5, 5));
     plane->setMesh(planeMeshDefault);
-    plane->setMaterial(whiteMaterial);
+    plane->setMaterial(materialRedish);
     _world->add(plane);
 
 
@@ -112,7 +119,7 @@ void MGEDemo::Assigment3()
     GameObject* cube = new GameObject("cube", glm::vec3(0, 1, 0));
     cube->scale(glm::vec3(5, 5, 5));
     cube->setMesh(teaPotMesh);
-    cube->setMaterial(whiteMaterial);
+    cube->setMaterial(materialRedish);
     cube->setBehaviour(new RotatingBehaviour(glm::vec3(1,0,1)));
     //_world->add(cube);
 
@@ -123,14 +130,14 @@ void MGEDemo::Assigment3()
     //Note how the texture material is able to detect the number of lights in the scene
     //even though it doesn't implement any lighting yet!
 
-    Light* light = new PointLight("light", glm::vec3(0,0,0));
+    Light* light = new PointLight("light", glm::vec3(0,5,0));
     light->rotate(90, glm::vec3(1, 0, 0));
-    light->setColor(glm::vec4(1, 0.0f, 0.0f,1.0f));
+    light->setColor(glm::vec4(1, 1.0f, 1.0f,1.0f));
     light->scale(glm::vec3(0.1f, 0.1f, 0.1f));
     light->setMesh(cubeMeshF);
     light->setMaterial(lightMaterial);
     //light->setBehaviour(new OrbitBehaviour(*cube, glm::vec3(0,0,10), false));
-    light->setBehaviour(new SinMovementBehaviour(1, glm::vec3(0,-1,0)));
+    light->setBehaviour(new SinMovementBehaviour(5, glm::vec3(0,1,0)));
 
     //light->setBehaviour(new RotatingBehaviour(glm::vec3(1,0,0)));
     _world->add(light);

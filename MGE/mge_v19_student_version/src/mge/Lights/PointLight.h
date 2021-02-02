@@ -5,10 +5,7 @@
 #include "glm.hpp"
 #include "mge/core/Light.hpp"
 
-/**
- * Exercise for the student: implement the Light class...
- * Imagine things like setLightType, setLightIntensity, setFalloffAngle etc, see the corresponding lectures
- */
+
 class PointLight : public Light
 {
 

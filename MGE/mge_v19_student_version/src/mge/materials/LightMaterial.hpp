@@ -18,13 +18,15 @@ class World;
 class LightMaterial : public AbstractMaterial
 {
 public:
-    LightMaterial(glm::vec3 pColor = glm::vec3(1, 0, 0));
+    LightMaterial(glm::vec3 pColor = glm::vec3(1, 0, 0), glm::vec3 pSpecularColor= glm::vec3(1,1,1), float shininess=1.0);
     virtual ~LightMaterial();
 
     virtual void render(World* pWorld, Mesh* pMesh, const glm::mat4& pModelMatrix, const glm::mat4& pViewMatrix, const glm::mat4& pProjectionMatrix) override;
 
     //in rgb values
     void setDiffuseColor(glm::vec3 pDiffuseColor);
+    void setSpecularColor(glm::vec3 pSpecularColor);
+    void setShininess(float pShininess);
 
 private:
     //all the static properties are shared between instances of ColorMaterial
@@ -34,6 +36,8 @@ private:
 
     //this one is unique per instance of color material
     glm::vec3 _diffuseColor;
+    glm::vec3 _specularColor;
+    float shininess;
 };
 
 #endif // LIGHTMATERIAL_HPP

@@ -13,5 +13,5 @@ SinMovementBehaviour::~SinMovementBehaviour()
 void SinMovementBehaviour::update(float pStep)
 {
 	timer += pStep;
-	_owner->translate(axis*sin(timer)*amplitude);
+	_owner->setLocalPosition(axis*sin(timer)*amplitude +glm::vec3(0,amplitude,0));
 }
