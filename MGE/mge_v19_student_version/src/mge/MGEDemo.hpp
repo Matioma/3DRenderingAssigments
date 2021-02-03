@@ -26,6 +26,7 @@ class MGEDemo: public AbstractGame
 		void Assigment3();
 
 		void Assigment2();
+		void Assigment4();
 
 	    //override render to render the hud as well.
 	    virtual void _render();

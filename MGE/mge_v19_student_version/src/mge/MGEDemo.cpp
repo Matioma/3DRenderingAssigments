@@ -16,6 +16,7 @@
 #include "mge/materials/ColorMaterial.hpp"
 #include "mge/materials/TextureMaterial.hpp"
 #include "mge/materials/LightMaterial.hpp"
+#include "mge/materials/TerrainMaterial.h"
 
 #include "mge/behaviours/RotatingBehaviour.hpp"
 #include "mge/behaviours/KeysBehaviour.hpp"
@@ -53,7 +54,8 @@ void MGEDemo::initialize() {
 //build the game _world
 void MGEDemo::_initializeScene()
 {
-    Assigment3();
+    Assigment4();
+    //Assigment3();
     //Assigment2();
 
 }
@@ -62,9 +64,6 @@ void MGEDemo::Assigment3()
 {
     //MESHES
 
-    //load a bunch of meshes we will be using throughout this demo
-    //each mesh only has to be loaded once, but can be used multiple times:
-    //F is flat shaded, S is smooth shaded (normals aligned or not), check the models folder!
     Mesh* planeMeshDefault = Mesh::load(config::MGE_MODEL_PATH + "plane.obj");
     Mesh* cubeMeshF = Mesh::load(config::MGE_MODEL_PATH + "cube_flat.obj");
     Mesh* sphereMeshS = Mesh::load(config::MGE_MODEL_PATH + "sphere_smooth.obj");
@@ -72,7 +71,6 @@ void MGEDemo::Assigment3()
     Mesh* coneSmooth = Mesh::load(config::MGE_MODEL_PATH + "cone_smooth.obj");
     Mesh* teaPotMesh = Mesh::load(config::MGE_MODEL_PATH + "teapot_smooth.obj");
     Mesh* cilinderMesh = Mesh::load(config::MGE_MODEL_PATH + "cylinder_smooth.obj");
-
 
 
     //MATERIALS
@@ -308,6 +306,131 @@ void MGEDemo::Assigment2()
     light->setMaterial(lightMaterial);
     light->setBehaviour(new KeysBehaviour(25));
     _world->add(light);*/
+}
+
+void MGEDemo::Assigment4()
+{
+    //MESHES
+
+    Mesh* planeMeshDefault = Mesh::load(config::MGE_MODEL_PATH + "plane.obj");
+    Mesh* cubeMeshF = Mesh::load(config::MGE_MODEL_PATH + "cube_flat.obj");
+    Mesh* sphereMeshS = Mesh::load(config::MGE_MODEL_PATH + "sphere_smooth.obj");
+
+    Mesh* coneSmooth = Mesh::load(config::MGE_MODEL_PATH + "cone_smooth.obj");
+    Mesh* teaPotMesh = Mesh::load(config::MGE_MODEL_PATH + "teapot_smooth.obj");
+    Mesh* cilinderMesh = Mesh::load(config::MGE_MODEL_PATH + "cylinder_smooth.obj");
+    Mesh* terrain = Mesh::load(config::MGE_MODEL_PATH + "plane_8192.obj");
+
+    //MATERIALS
+
+    //create some materials to display the cube, the plane and the light
+    AbstractMaterial* lightMaterial = new ColorMaterial(glm::vec3(1, 1, 0));
+    AbstractMaterial* runicStoneMaterial = new TextureMaterial(Texture::load(config::MGE_TEXTURE_PATH + "runicfloor.png"));
+    AbstractMaterial* brickMaterial = new TextureMaterial(Texture::load(config::MGE_TEXTURE_PATH + "bricks.jpg"));
+    AbstractMaterial* landNaterial = new TextureMaterial(Texture::load(config::MGE_TEXTURE_PATH + "land.jpg"));
+
+
+
+
+    AbstractMaterial* red = new ColorMaterial(glm::vec3(1, 0, 0));
+    AbstractMaterial* blue = new ColorMaterial(glm::vec3(0, 0, 1));
+
+
+
+    //LightMaterial* lightMaterial = ;ec
+
+    AbstractMaterial* materialRedish = new LightMaterial(glm::vec3(0, 0, 1), glm::vec3(1, 0, 0), 50);
+    
+    TerrainMaterial* terrainMaterialInstance = new TerrainMaterial();
+    terrainMaterialInstance->setHeightMap(Texture::load(config::MGE_TEXTURE_PATH + "terrain/heightmap.png"));
+    terrainMaterialInstance->setSplatMap(Texture::load(config::MGE_TEXTURE_PATH + "terrain/splatmap.png"));
+    terrainMaterialInstance->setDiffuseTexture1(Texture::load(config::MGE_TEXTURE_PATH + "terrain/diffuse1.jpg"));
+    terrainMaterialInstance->setDiffuseTexture2(Texture::load(config::MGE_TEXTURE_PATH + "terrain/diffuse2.jpg"));
+    terrainMaterialInstance->setDiffuseTexture3(Texture::load(config::MGE_TEXTURE_PATH + "terrain/diffuse3.jpg"));
+    terrainMaterialInstance->setDiffuseTexture4(Texture::load(config::MGE_TEXTURE_PATH + "terrain/diffuse4.jpg"));
+    AbstractMaterial* terrainMaterial = terrainMaterialInstance;
+
+
+    //SCENE SETUP
+
+    //add camera first (it will be updated last)
+    Camera* camera = new Camera("camera", glm::vec3(0, 15, 15));
+    camera->rotate(glm::radians(-40.0f), glm::vec3(1, 0, 0));
+
+
+
+    _world->add(camera);
+    _world->setMainCamera(camera);
+
+
+    //add the floor
+    GameObject* groundPlane = new GameObject("plane", glm::vec3(0, 0, 0));
+    groundPlane->scale(glm::vec3(5, 5, 5));
+    groundPlane->setMesh(terrain);
+    groundPlane->setMaterial(terrainMaterial);
+    _world->add(groundPlane);
+
+    camera->setBehaviour(new OrbitBehaviour(*groundPlane, glm::vec3(0, 5, 5)));
+
+    /* groundPlane = new GameObject("plane", glm::vec3(0, 3, 0));
+     groundPlane->scale(glm::vec3(5, 5, 5));
+     groundPlane->setMesh(planeMeshDefault);
+     groundPlane->setMaterial(materialRedish);
+     _world->add(groundPlane);*/
+
+     //camera->setBehaviour(new FollowBehaviour(*groundPlane));
+
+     ////add the floor
+    //GameObject* backplane = new GameObject("plane", glm::vec3(0, 1, -1));
+    //backplane->rotate(-90, glm::vec3(1, 0, 0));
+    //backplane->scale(glm::vec3(5, 5, 5));
+    //backplane->setMesh(planeMeshDefault);
+    //backplane->setMaterial(materialRedish);
+    ////backplane->setBehaviour(new RotatingBehaviour(glm::vec3(1,0,0)));
+    //_world->add(backplane);
+
+
+
+    //GameObject* cube = new GameObject("cube", glm::vec3(0, 1, 0));
+    //cube->scale(glm::vec3(5, 5, 5));
+    //cube->setMesh(teaPotMesh);
+    //cube->setMaterial(materialRedish);
+    //cube->setBehaviour(new RotatingBehaviour(glm::vec3(1, 0, 1)));
+
+    //_world->add(cube);
+
+
+    //camera->setBehaviour(new OrbitBehaviour(*cube,glm::vec3(0,25,25)));
+    //add a light. Note that the light does ABSOLUTELY ZIP! NADA ! NOTHING !
+    //It's here as a place holder to get you started.
+    //Note how the texture material is able to detect the number of lights in the scene
+    //even though it doesn't implement any lighting yet!
+
+
+
+    Light* pointLight = new PointLight("light", glm::vec3(0, 3, 0));
+    pointLight->rotate(90, glm::vec3(1, 0, 0));
+    pointLight->setColor(glm::vec4(1.0, 0, 0.0f, 1.0f));
+    pointLight->scale(glm::vec3(0.1f, 0.1f, 0.1f));
+    pointLight->setMesh(cubeMeshF);
+    pointLight->setMaterial(lightMaterial);
+    //light->setBehaviour(new OrbitBehaviour(*cube, glm::vec3(0,0,10), false));
+    //pointLight->setBehaviour(new SinMovementBehaviour(5, glm::vec3(0, 1, 0)));
+    _world->add(pointLight);
+
+
+    //Light* spotLight = new SpotLight("spotLight", glm::vec3(0, 3, 0));
+    //spotLight->rotate(135, glm::vec3(0, 0, 1));
+    //spotLight->rotate(135, glm::vec3(1, 0, 0));
+    //spotLight->setColor(glm::vec4(1, 1.0f, 1.0f, 1.0f));
+    //spotLight->scale(glm::vec3(0.1f, 0.1f, 0.1f));
+    //spotLight->setMesh(cubeMeshF);
+    //spotLight->setMaterial(lightMaterial);
+    ////spotLight->setBehaviour(new OrbitBehaviour(*cube, glm::vec3(0,0,10), false));
+    ////spotLight->setBehaviour(new SinMovementBehaviour(5, glm::vec3(0, 1, 0)));
+
+    //spotLight->setBehaviour(new RotatingBehaviour(glm::vec3(1, 0, 0)));
+    //_world->add(spotLight);
 }
 
 void MGEDemo::_render() {

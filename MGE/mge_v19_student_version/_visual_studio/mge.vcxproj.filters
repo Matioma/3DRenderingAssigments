@@ -106,6 +106,9 @@
     <ClInclude Include="..\src\mge\Lights\SpotLight.h">
       <Filter>MGE Source files\mge\lights</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\mge\materials\TerrainMaterial.h">
+      <Filter>MGE Source files\mge\materials</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\main.cpp">
@@ -185,6 +188,9 @@
     </ClCompile>
     <ClCompile Include="..\src\mge\Lights\SpotLight.cpp">
       <Filter>MGE Source files\mge\lights</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\mge\materials\TerrainMaterial.cpp">
+      <Filter>MGE Source files\mge\materials</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
