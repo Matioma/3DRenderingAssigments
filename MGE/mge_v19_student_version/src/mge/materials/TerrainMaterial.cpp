@@ -106,7 +106,6 @@ void TerrainMaterial::render(World* pWorld, Mesh* pMesh, const glm::mat4& pModel
     glBindTexture(GL_TEXTURE_2D, splatMap->getId());
     glUniform1i(_shader->getUniformLocation("splatMap"), 1);
 
-
     glActiveTexture(GL_TEXTURE2);
     glBindTexture(GL_TEXTURE_2D, diffuseTexture1->getId());
     glUniform1i(_shader->getUniformLocation("diffuseTexture1"), 2);
@@ -130,12 +129,11 @@ void TerrainMaterial::render(World* pWorld, Mesh* pMesh, const glm::mat4& pModel
 
 
     DirectionalLight* dirLight = dynamic_cast<DirectionalLight*>(light);
-
     if (dirLight) {
         glUniform1i(_shader->getUniformLocation("lightType"), 0);
         glm::vec3 direction = glm::normalize(dirLight->getTransform()[2]);
         glUniform3fv(_shader->getUniformLocation("lightDirection"), 1, glm::value_ptr(direction));
-
+        //std::cout << "dir light" << std::endl;
     }
     PointLight* pointLight = dynamic_cast<PointLight*>(light);
     if (pointLight) {
@@ -146,7 +144,6 @@ void TerrainMaterial::render(World* pWorld, Mesh* pMesh, const glm::mat4& pModel
     if (spotLight) {
         glUniform1i(_shader->getUniformLocation("lightType"), 2);
         glm::vec3 down = -glm::normalize(spotLight->getWorldTransform()[1]);
-        // std::cout << down << std::endl;
         glUniform3fv(_shader->getUniformLocation("lightDirection"), 1, glm::value_ptr(down));
 
         glUniform1f(_shader->getUniformLocation("coneAngle"), 60);

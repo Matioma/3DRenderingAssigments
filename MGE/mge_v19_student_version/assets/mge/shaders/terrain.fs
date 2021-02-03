@@ -42,6 +42,7 @@ in vec3 fPosition;
 in vec2 fuv;
 
 
+in vec3 testColor;
 
 
 void main( void ) {
@@ -63,12 +64,6 @@ void main( void ) {
 						vec4(splatMapSample.b*diff3Sample) +
 						vec4(splatMapSample.a* diff4Sample);
 
-	// vec4 framentTexture = (vec4(diff1Sample.xyz,splatMapSample.x)
-	// 					+vec4(diff2Sample.xyz,splatMapSample.y) 
-	// 					+vec4(diff3Sample.xyz,splatMapSample.z)
-	// 					+vec4(diff4Sample.xyz,splatMapSample.w))* vec4();
-
-	//vec4 framentTexture =vec4(splatMapSample.x,splatMapSample.x,splatMapSample.x,1);
 
 	vec3 normalizedLightDirection = normalize(lightDirection);
 	vec3 normalizedNormal = normalize(fNormal);
@@ -87,28 +82,26 @@ void main( void ) {
 
 	//lightType =1;
 	if(lightType ==0){
+		vec3 normalizedLightDirection = normalize(lightDirection);
+
+
 		intensity =max(dot(normalizedNormal, -normalizedLightDirection),0);
+		//intensity=0;
 	}else if(lightType==1){
 		//Point Light Intensity
-		intensity =max(dot(normalizedNormal, -normalizedLightDirection),0)/(1+lightDistance);
+		//intensity =max(dot(normalizedNormal, -normalizedLightDirection),0)/(1+lightDistance);
 	}else if(lightType==2){
 		//Spot Light
-		
 		vec3 FragmentToLight = normalize(lightVector);
-
 		float angleCos = dot(FragmentToLight,lightDirection);
-
-
 
 		float FallOfEdge = cos(radians((coneAngle-coneFallOffAngle)/2)); //Cos at the edge of most bright part
 		float DarkEdge =cos(radians(coneAngle/2)); //Cos at the edge of the light cone
 
 		float coneintensity = clamp( (angleCos-DarkEdge)/(FallOfEdge -DarkEdge),0,1);//
 
-
-
 		if(cos(radians(coneAngle/2))<angleCos){
-			intensity =max(dot(normalizedNormal, -normalizedLightDirection),0)/(1+lightDistance)*coneintensity;
+			//intensity =max(dot(normalizedNormal, -normalizedLightDirection),0)/(1+lightDistance)*coneintensity;
 		}
 	}
 
@@ -123,12 +116,12 @@ void main( void ) {
 
 
 
-	//vec3 finalColor = (framentTexture+ambientColor+specularTerm)*intensity ;
+	vec4 finalColor = (framentTexture)*(intensity);// (framentTexture+ambientColor+specularTerm)*intensity ;
 	//fragment_color = vec4(framentTexture,1);
-	fragment_color = framentTexture;
 	
-
-
+	fragment_color = vec4(finalColor.xyz,1);
 	
+	//fragment_color = vec4(testColor,1);
+
 
 }

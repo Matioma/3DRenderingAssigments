@@ -368,9 +368,11 @@ void MGEDemo::Assigment4()
     groundPlane->scale(glm::vec3(5, 5, 5));
     groundPlane->setMesh(terrain);
     groundPlane->setMaterial(terrainMaterial);
+    groundPlane->setBehaviour(new RotatingBehaviour(glm::vec3(0, 1, 0)));
     _world->add(groundPlane);
 
-    camera->setBehaviour(new OrbitBehaviour(*groundPlane, glm::vec3(0, 5, 5)));
+    //camera->setBehaviour(new OrbitBehaviour(*groundPlane, glm::vec3(0, 5, 5)));
+    camera->setBehaviour(new KeysBehaviour());
 
     /* groundPlane = new GameObject("plane", glm::vec3(0, 3, 0));
      groundPlane->scale(glm::vec3(5, 5, 5));
@@ -407,16 +409,30 @@ void MGEDemo::Assigment4()
     //even though it doesn't implement any lighting yet!
 
 
-
-    Light* pointLight = new PointLight("light", glm::vec3(0, 3, 0));
-    pointLight->rotate(90, glm::vec3(1, 0, 0));
-    pointLight->setColor(glm::vec4(1.0, 0, 0.0f, 1.0f));
-    pointLight->scale(glm::vec3(0.1f, 0.1f, 0.1f));
-    pointLight->setMesh(cubeMeshF);
-    pointLight->setMaterial(lightMaterial);
+    
+    DirectionalLight* dirrectionalLight = new DirectionalLight("light", glm::vec3(0, 3, 0));
+    //pointLight->setDirection(glm::vec3(0,1,0));
+  
+    dirrectionalLight->rotate(90, glm::vec3(1, 0, 0));
+    dirrectionalLight->setColor(glm::vec4(1.0, 0, 0.0f, 1.0f));
+    dirrectionalLight->scale(glm::vec3(0.1f, 0.1f, 0.1f));
+    dirrectionalLight->setMesh(cubeMeshF);
+    dirrectionalLight->setMaterial(lightMaterial);
     //light->setBehaviour(new OrbitBehaviour(*cube, glm::vec3(0,0,10), false));
-    //pointLight->setBehaviour(new SinMovementBehaviour(5, glm::vec3(0, 1, 0)));
-    _world->add(pointLight);
+    //dirrectionalLight->setBehaviour(new SinMovementBehaviour(5, glm::vec3(0, 1, 0)));
+    //dirrectionalLight->setBehaviour(new RotatingBehaviour(glm::vec3(1, 0, 0)));
+    _world->add(dirrectionalLight);
+
+
+    //Light* pointLight = new PointLight("light", glm::vec3(0, 3, 0));
+    //pointLight->rotate(90, glm::vec3(1, 0, 0));
+    //pointLight->setColor(glm::vec4(1.0, 0, 0.0f, 1.0f));
+    //pointLight->scale(glm::vec3(0.1f, 0.1f, 0.1f));
+    //pointLight->setMesh(cubeMeshF);
+    //pointLight->setMaterial(lightMaterial);
+    ////light->setBehaviour(new OrbitBehaviour(*cube, glm::vec3(0,0,10), false));
+    ////pointLight->setBehaviour(new SinMovementBehaviour(5, glm::vec3(0, 1, 0)));
+    //_world->add(pointLight);
 
 
     //Light* spotLight = new SpotLight("spotLight", glm::vec3(0, 3, 0));
